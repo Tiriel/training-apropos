@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+enum AdminLevel {
+    Admin
+    SuperAdmin
+}
+
+class Member {
+    # login: string
+    # password: string
+    # age: int
+    + auth(login: string, password: string): bool
+}
+
+class Admin extends Member {
+    # level: AdminLevel
+}
+
+Admin::level --o AdminLevel
+
+@enduml
