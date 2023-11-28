@@ -1,0 +1,5 @@
+<ul>
+    {% for movie in last_movies %}
+        <li><a href="{{ path('app_movie_show', {id: movie.id}) }}">{{ movie.title }}</a></li>
+    {% endfor %}
+</ul>

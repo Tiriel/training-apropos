@@ -17,7 +17,7 @@ class BookController extends AbstractController
         ]);
     }
 
-    #[Route('/{id<\d+>?1}', name: 'app_book_show', methods: ['GET'])]
+    #[Route('/{!id<\d+>?1}', name: 'app_book_show', methods: ['GET'])]
     // #[Route('/{id}', name: 'app_book_show', requirements: ['id' => '\d+'], defaults: ['id' => 1])]
     public function show(int $id = 0): Response
     {
