@@ -1,19 +1,18 @@
+{% macro nav_link(current, target, label) %}
+    <li class="nav-item">
+        <a class="nav-link{{ current == target ? ' active' }}" href="{{ path(target) }}">{{ label }}</a>
+    </li>
+{% endmacro %}
+
+{% set current = app.current_route %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">Sensio TV+</a>
+        <a class="navbar-brand" href="{{ path('app_main_index') }}">Sensio TV+</a>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-                <a class="nav-link" href="">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="">Book</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="">Movie</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="">Contact</a>
-            </li>
+            {{ _self.nav_link(current, 'app_main_index', 'Home') }}
+            {{ _self.nav_link(current, 'app_book_index', 'Book') }}
+            {{ _self.nav_link(current, 'app_movie_index', 'Movie') }}
+            {{ _self.nav_link(current, 'app_main_contact', 'Contact') }}
         </ul>
     </div>
 </nav>
