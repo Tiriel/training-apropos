@@ -2,12 +2,12 @@
 
 {% block title %}Hello HelloController!{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: {{ max_width }}px; width: 95%; font: 18px/1.5 sans-serif; }}
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('payment') }}
+{% endblock %}
 
+{% block body %}
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
 
@@ -20,5 +20,6 @@
             <li>{{ loop.index0 }} : {{ letter }}</li>
         {% endfor %}#}
     </ul>
+    <img src="{{ asset('build/images/31116_JssY.jpeg') }}">
 </div>
 {% endblock %}
