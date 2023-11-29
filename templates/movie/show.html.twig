@@ -6,11 +6,13 @@
 <div class="example-wrapper">
     <h1>{{ movie.title }}</h1>
 
-    <ul>
-        <li>Id : {{ movie.id }}</li>
-        <li>Country : {{ movie.country }}</li>
-        <li>Released At : {{ movie.releasedAt|date('d M Y') }}</li>
-        <li>Genres : {{ movie.genres|join(', ') }}</li>
+    <img src="{{ movie.poster }}" alt="{{ movie.title }} poster" class="float-end" />
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Id : {{ movie.id }}</li>
+        <li class="list-group-item">Released : {{ movie.releasedAt|date('d M Y') }}</li>
+        <li class="list-group-item">Country : {{ movie.country }}</li>
+        <li class="list-group-item">Plot : {{ movie.plot }}</li>
+        {#<li>Genres : {{ movie.genres|join(', ') }}</li>#}
     </ul>
 </div>
 {% endblock %}
