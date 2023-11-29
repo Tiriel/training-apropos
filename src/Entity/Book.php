@@ -7,9 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 #[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
+#[UniqueEntity(['title', 'author', 'releasedAt'])]
 class Book
 {
     #[ORM\Id]
@@ -17,24 +20,33 @@ class Book
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $author = null;
 
+    #[Assert\NotBlank()]
+    #[Assert\Isbn()]
     #[ORM\Column(length: 20)]
     private ?string $isbn = null;
 
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 10, minMessage: 'The plot should be at least 10 characters long.')]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $plot = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $releasedAt = null;
 
+    #[Assert\Url()]
     #[ORM\Column(length: 255)]
     private ?string $cover = null;
 
+    #[Assert\Unique()]
+    #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'book', targetEntity: Comment::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $comments;
 
