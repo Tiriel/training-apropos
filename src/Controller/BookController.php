@@ -13,10 +13,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class BookController extends AbstractController
 {
     #[Route('', name: 'app_book_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(BookRepository $repository): Response
     {
         return $this->render('book/index.html.twig', [
-            'controller_name' => 'BookController::index',
+            'books' => $repository->findAll(),
         ]);
     }
 
@@ -24,8 +24,8 @@ class BookController extends AbstractController
     // #[Route('/{id}', name: 'app_book_show', requirements: ['id' => '\d+'], defaults: ['id' => 1])]
     public function show(Book $book): Response
     {
-        return $this->render('book/index.html.twig', [
-            'controller_name' => 'BookController::show - id : '.$book->getId(),
+        return $this->render('book/show.html.twig', [
+            'book' => $book,
         ]);
     }
 
