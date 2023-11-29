@@ -21,4 +21,7 @@ return [
     'bootstrap' => [
         'url' => 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/+esm',
     ],
+    'js-confetti' => [
+        'url' => 'https://cdn.jsdelivr.net/npm/js-confetti@0.11.0/+esm',
+    ],
 ];

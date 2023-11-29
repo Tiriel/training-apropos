@@ -3,8 +3,7 @@
 {% block title %}Hello HelloController!{% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags('payment') }}
+    {{ importmap(asset('payment.js')) }}
 {% endblock %}
 
 {% block body %}
@@ -20,6 +19,6 @@
             <li>{{ loop.index0 }} : {{ letter }}</li>
         {% endfor %}#}
     </ul>
-    <img src="{{ asset('build/images/31116_JssY.jpeg') }}">
+    <img src="{{ asset('images/31116_JssY.jpeg') }}">
 </div>
 {% endblock %}
