@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Form\BookType;
 use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -29,21 +31,23 @@ class BookController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_book_new', methods: ['GET'])]
-    public function new(EntityManagerInterface $manager): Response
+    #[Route('/new', name: 'app_book_new', methods: ['GET', 'POST'])]
+    #[Route('/{id<\d+>}/edit', name: 'app_book_edit', methods: ['GET', 'POST'])]
+    public function save(Request $request, ?Book $book, EntityManagerInterface $manager): Response
     {
-        $book = (new Book())
-                ->setTitle('1984')
-                ->setIsbn('978-6758496-456')
-                ->setCover('http://blahblah')
-                ->setPlot('Basically now.')
-                ->setReleasedAt(new \DateTimeImmutable('01-01-1951'))
-                ->setAuthor('Orwell')
-            ;
+        $book ??= new Book();
+        $form = $this->createForm(BookType::class, $book);
 
-        $manager->persist($book);
-        $manager->flush();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($book);
+            $manager->flush();
 
-        return $this->redirectToRoute('app_book_show', ['id' => $book->getId()]);
+            return $this->redirectToRoute('app_book_show', ['id' => $book->getId()]);
+        }
+
+        return $this->render('book/new.html.twig', [
+            'form' => $form,
+        ]);
     }
 }
