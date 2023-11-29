@@ -21,6 +21,7 @@ class MovieFixtures extends Fixture
 
     public function getMovies(): iterable
     {
+        $genres = [];
         foreach ($this->getMoviesData() as $datum) {
             $date = $datum['Released'] === 'N/A' ? $datum['Year'] : $datum['Released'];
 
@@ -35,9 +36,11 @@ class MovieFixtures extends Fixture
                 //->setImdbId($datum['imdbID'])
             ;
 
-            //foreach (explode(', ', $datum['Genre']) as $genreName) {
-            //    $movie->addGenre((new Genre())->setName($genreName));
-            //}
+            foreach (explode(', ', $datum['Genre']) as $genreName) {
+                $genre = $genres[$genreName]
+                    ?? $genres[$genreName] = (new Genre())->setName($genreName);
+                $movie->addGenre($genre);
+            }
 
             yield $movie;
         }
