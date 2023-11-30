@@ -7,11 +7,11 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class OmdbApiConsumer
 {
-    protected readonly HttpClientInterface $client;
+    public function __construct(protected readonly HttpClientInterface $omdbClient) {}
 
     public function fetch(SearchType $type, string $value): iterable
     {
-        $data = $this->client->request(
+        $data = $this->omdbClient->request(
             'GET',
             '',
             ['query' => [

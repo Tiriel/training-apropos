@@ -6,6 +6,8 @@
 parameters:
     app.max_width: 800
     app.items_per_page: 20
+    env(DATABASE_URL): 'foosql://bar:baz@quux:0000'
+    app.sf_version: '%env(key:require:key:symfony:key:extra:json:file:resolve:COMPOSER_PATH)%'
 
 services:
     # default configuration for services in *this* file
