@@ -18,7 +18,7 @@ class CacheableOmdbApiConsumer extends OmdbApiConsumer
         protected readonly SluggerInterface $slugger
     ) {}
 
-    public function fetch(SearchType $type, string $value): iterable
+    public function fetch(SearchType $type, string $value): array
     {
         $key = sprintf("%s_%s", $type->value, $value);
 

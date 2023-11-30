@@ -9,7 +9,7 @@ class OmdbApiConsumer
 {
     public function __construct(protected readonly HttpClientInterface $omdbClient) {}
 
-    public function fetch(SearchType $type, string $value): iterable
+    public function fetch(SearchType $type, string $value): array
     {
         $data = $this->omdbClient->request(
             'GET',
