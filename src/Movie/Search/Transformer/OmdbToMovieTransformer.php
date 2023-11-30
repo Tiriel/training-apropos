@@ -14,6 +14,8 @@ class OmdbToMovieTransformer
         'Released',
         'Year',
         'Poster',
+        'Rated',
+        'imdbID',
     ];
 
     public function getOne(array $data): Movie
@@ -31,8 +33,8 @@ class OmdbToMovieTransformer
             ->setReleasedAt(new \DateTimeImmutable($date))
             ->setPoster($data['Poster'])
             ->setPrice(5.0)
-            //->setRated($data['Rated'])
-            //->setImdbId($data['imdbID'])
+            ->setRated($data['Rated'])
+            ->setImdbId($data['imdbID'])
         ;
     }
 }
