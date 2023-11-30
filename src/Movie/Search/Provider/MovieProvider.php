@@ -21,7 +21,10 @@ class MovieProvider
     {
         $data = $this->consumer->fetch($type, $value);
 
-        if (($movie = $this->manager->getRepository(Movie::class)->findOneBy(['title' => $data['Title']])) instanceof  Movie) {
+        $movie = $this->manager
+            ->getRepository(Movie::class)
+            ->findOneBy(['title' => $data[OmdbToMovieTransformer::TITLE_KEY]]);
+        if ($movie instanceof  Movie) {
             return $movie;
         }
 

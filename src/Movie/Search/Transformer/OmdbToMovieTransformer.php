@@ -6,8 +6,9 @@ use App\Entity\Movie;
 
 class OmdbToMovieTransformer
 {
+    public const TITLE_KEY = 'Title';
     public const KEYS = [
-        'Title',
+        self::TITLE_KEY,
         'Plot',
         'Country',
         'Released',
