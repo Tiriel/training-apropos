@@ -14,11 +14,4 @@ class OmdbToGenreTransformer
 
         return (new Genre())->setName($data);
     }
-
-    public function getGenresFromOmdb(string $data): iterable
-    {
-        foreach (explode(', ', $data) as $name) {
-            yield $this->getOne($name);
-        }
-    }
 }
