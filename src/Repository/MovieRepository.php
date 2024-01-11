@@ -3,8 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Movie;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Movie>
@@ -16,9 +19,29 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MovieRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private readonly AuthorizationCheckerInterface $checker)
     {
         parent::__construct($registry, Movie::class);
+    }
+
+    public function findByRated(?User $user): iterable
+    {
+        if ($this->checker->isGranted('ROLE_ADMIN')) {
+            return $this->findAll();
+        }
+
+        $age = $user->getAge();
+        $ratings = match (true) {
+            $age < 13, null === $age => ['G'],
+            $age < 17 => ['PG', 'PG-13', 'G'],
+            default => ['R', 'NC-17', 'PG', 'PG-13', 'G'],
+        };
+
+        $qb = $this->createQueryBuilder('m');
+
+        return $qb->andWhere($qb->expr()->in('m.rated', $ratings))
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

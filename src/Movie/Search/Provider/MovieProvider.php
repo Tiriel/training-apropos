@@ -7,9 +7,11 @@ use App\Entity\User;
 use App\Movie\Search\OmdbApiConsumer;
 use App\Movie\Search\SearchType;
 use App\Movie\Search\Transformer\OmdbToMovieTransformer;
+use App\Security\Voter\MovieVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class MovieProvider
 {
@@ -34,16 +36,23 @@ class MovieProvider
             ->findOneBy(['title' => $data[OmdbToMovieTransformer::TITLE_KEY]]);
         if ($movie instanceof  Movie) {
             $this->io?->note('Movie already in database!');
+            if (!$this->security->isGranted(MovieVoter::RATED, $movie)) {
+                throw new AccessDeniedException();
+            }
+
             return $movie;
         }
 
         $this->io?->text('Creating movie object...');
         $movie = $this->transformer->getOne($data);
+
         foreach ($this->genreProvider->getGenresFromOmdb($data['Genre']) as $genre) {
             $movie->addGenre($genre);
         }
 
-        if (($user = $this->security->getUser()) instanceof User) {
+        if (($user = $this->security->getUser()) instanceof User
+            && $this->security->isGranted(MovieVoter::RATED, $movie)
+        ) {
             $movie->setCreatedBy($user);
         }
 

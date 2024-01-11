@@ -7,11 +7,13 @@ use App\Form\MovieType;
 use App\Movie\Search\Provider\MovieProvider;
 use App\Movie\Search\SearchType;
 use App\Repository\MovieRepository;
+use App\Security\Voter\MovieVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/movie')]
 class MovieController extends AbstractController
@@ -20,10 +22,11 @@ class MovieController extends AbstractController
     public function index(MovieRepository $repository): Response
     {
         return $this->render('movie/index.html.twig', [
-            'movies' => $repository->findAll(),
+            'movies' => $repository->findByRated($this->getUser() ?? null),
         ]);
     }
 
+    #[IsGranted(MovieVoter::RATED, 'movie')]
     #[Route('/{id<\d+>}', name: 'app_movie_show')]
     public function show(Movie $movie): Response
     {
