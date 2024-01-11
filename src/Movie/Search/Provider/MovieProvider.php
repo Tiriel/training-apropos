@@ -3,10 +3,12 @@
 namespace App\Movie\Search\Provider;
 
 use App\Entity\Movie;
+use App\Entity\User;
 use App\Movie\Search\OmdbApiConsumer;
 use App\Movie\Search\SearchType;
 use App\Movie\Search\Transformer\OmdbToMovieTransformer;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MovieProvider
@@ -18,6 +20,7 @@ class MovieProvider
         protected readonly EntityManagerInterface $manager,
         protected readonly OmdbToMovieTransformer $transformer,
         protected readonly GenreProvider $genreProvider,
+        protected readonly Security $security
     ) {
     }
 
@@ -38,6 +41,10 @@ class MovieProvider
         $movie = $this->transformer->getOne($data);
         foreach ($this->genreProvider->getGenresFromOmdb($data['Genre']) as $genre) {
             $movie->addGenre($genre);
+        }
+
+        if (($user = $this->security->getUser()) instanceof User) {
+            $movie->setCreatedBy($user);
         }
 
         $this->io?->text('Saving in database.');
