@@ -18,4 +18,10 @@ class HelloController extends AbstractController
             'controller_name' => $name,
         ]);
     }
+
+    #[Route('/transmit/{name<(?:\pL|[- ]?)+>?World}', name: 'app_hello_transmit')]
+    public function transmit(): Response
+    {
+        return $this->forward('App\\Controller\\HelloController::index');
+    }
 }
